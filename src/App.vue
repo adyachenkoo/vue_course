@@ -5,7 +5,7 @@
         />
         <PostList 
         :posts="posts"
-        @delete="deletePost"
+        @remove="removePost"
         />
     </div>
 </template>
@@ -30,10 +30,8 @@ export default {
         createPost(post){
             this.posts.push(post);
         },
-        deletePost(id) {
-            console.log(this.posts.find((element)=>{
-                element.id == id;
-            }))
+        removePost(post) {
+            this.posts = this.posts.filter(p => p.id !== post.id)
         }
     }
 }
