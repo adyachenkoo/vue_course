@@ -18,8 +18,9 @@
         <MyButton 
         class="button" 
         @click="createPost"
-        :text="'Создать'"
-        />
+        >
+        Создать
+        </MyButton>
     </form>
 </template>
 <script>

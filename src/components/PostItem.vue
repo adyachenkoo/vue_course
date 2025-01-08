@@ -5,9 +5,9 @@
             <div><strong>Описание: </strong> {{ post.body }} </div>
         </div>
         <div class="post__btns">
-            <MyButton
-            :text="'Удалить'"
-            />
+            <MyButton>
+                Удалить
+            </MyButton>
         </div>
     </div>
 </template>
