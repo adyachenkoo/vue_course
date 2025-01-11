@@ -1,6 +1,7 @@
 import MyButton from "@/components/UI/MyButton"
-import MyInpun from "./MyInpun.vue"
+import MyInpun from "@/components/UI/MyInpun.vue"
+import MyDialog from "@/components/UI/MyDialog.vue"
 
 export default [
-    MyButton, MyInpun
+    MyButton, MyInpun, MyDialog
 ]
