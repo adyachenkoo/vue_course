@@ -1,12 +1,17 @@
 <template>
     <div class="app">
         <h1>Страница с постами</h1>
-        <MyButton
-        @click="dialogVisible = true"
-        style="margin: 15px 0;"
-        >
-        Создать пост
-        </MyButton>
+        <div class="app__buttons">
+            <MyButton
+            @click="dialogVisible = true"
+            >
+            Создать пост
+            </MyButton>
+            <MySelect
+            v-model="selectedSort"
+            :options="options"
+            />
+        </div>
         <MyDialog
         v-model:show="dialogVisible"
         >
@@ -15,27 +20,42 @@
             />
         </MyDialog>
         <PostList 
-        :posts="posts"
+        v-if="!isPostsLoading"
+        :posts="sortedPosts"
         @remove="removePost"
         />
+        <h2
+        v-else=""
+        >
+        Посты загружаются...
+        </h2>
     </div>
 </template>
 
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
+import axios from "axios";
 export default {
     components: {
         PostList, PostForm
     },
     data() {
         return {
-            posts: [
-                {id:1, title:"POST 1", body:"Описание поста 1"},
-                {id:2, title:"POST 2", body:"Описание поста 2"},
-                {id:3, title:"POST 3", body:"Описание поста 3"},
-            ],
+            posts: [],
             dialogVisible: false,
+            isPostsLoading: false,
+            selectedSort: '',
+            options: [
+                {
+                    value: 'title',
+                    name: 'По заголовку'
+                },
+                {
+                    value: 'body',
+                    name: 'По описанию'
+                },
+            ]
         }
     },
     methods: {
@@ -46,9 +66,29 @@ export default {
         removePost(post) {
             this.posts = this.posts.filter(p => p.id !== post.id);
         },
-        async function () {
+        async fetchPosts() {
+            try {
+                this.isPostsLoading = true;
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                this.posts = response.data;
+            } catch (e) {
+                alert(e);
+            } finally {
+                this.isPostsLoading = false;
+            }
+        } 
+    },
+    mounted(){
+        this.fetchPosts();
+    },
+    computed: {
+        sortedPosts(){
+            return [...this.posts].sort((post1, post2) => post1[this.selectedSort]?.localeCompare(post2[this.selectedSort]));
         
         }
+    },
+    watch: {
+        
     }
 }
 </script>
@@ -60,6 +100,12 @@ export default {
     box-sizing: border-box;
 }
 .app {
+    overflow-x: hidden;
     padding: 20px;
+}
+.app__buttons {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
 }
 </style>
