@@ -33,20 +33,11 @@
         >
         Посты загружаются...
         </h2>
-        <div 
-        class="page__wrapper">
-            <div 
-            v-for="pageNumber in totalPage"
-            :key="page"
-            class="page"
-            :class="{
-                'current-page' : pageNumber === page
-            }"
-            @click="changePage(pageNumber)"
-            >
-                {{ pageNumber }}
-            </div>
-        </div>
+        <MyPagination 
+        :page="page"
+        :totalPage="totalPage"
+        v-model:page="page"
+        />
     </div>
 </template>
 
@@ -124,7 +115,10 @@ export default {
         }
     },
     watch: {
-        
+        page(pageNumder) {
+            this.page = pageNumder;
+            this.fetchPosts()
+        }
     }
 }
 </script>
@@ -143,16 +137,5 @@ export default {
     margin: 15px 0;
     display: flex;
     justify-content: space-between;
-}
-.page__wrapper {
-    display: flex;
-    margin-top: 15px;
-}
-.page {
-    border: 1px solid black;
-    padding: 10px;
-}
-.current-page {
-    border: 2px solid teal;
 }
 </style>
